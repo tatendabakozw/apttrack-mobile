@@ -1,32 +1,55 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
-
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+import React from "react";
+import { Tabs } from "expo-router";
+import { Platform } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}>
-      <Tabs.Screen
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color }) => {
+          let iconName: any;
+
+          if (route.name === "index") {
+            iconName = focused ? "home-sharp" : "home-outline";
+          } else if (route.name === "explore") {
+            iconName = focused ? "compass" : "compass-outline";
+          } else if (route.name === "activity") {
+            iconName = focused ? "play-circle-sharp" : "play-circle-outline";
+          } else if (route.name === "profile") {
+            iconName = focused ? "person" : "person-outline";
+          }
+
+          // You can return any component that you like here!
+          return <Ionicons name={iconName} size={24} color={color} />;
+        },
+        headerShown: false,
+        tabBarActiveTintColor:route.name === 'index' ? "#cbc5e9" : '#2f4a55',
+        tabBarInactiveTintColor: "#94a3b8",
+        tabBarLabelStyle: {
+          fontSize: 13,
+        },
+        tabBarStyle: {
+          height: 70,
+          paddingVertical: Platform.OS === "ios" ? 20 : 0,
+          position: "absolute",
+          bottom: 20,
+          left: 10,
+          right: 10,
+          borderRadius: 20,
+          backgroundColor: route.name === "index" ? "#2f4a55" : "#fff",
+          elevation: 0,
+          borderTopWidth: 0,
+          borderColor: route.name === "name" ? "white" : "black",
+        },
+        tabBarShowLabel: false,
+      })}
+    >
+    <Tabs.Screen name="index" options={{title: 'Tab One',}} />
+      <Tabs.Screen name="explore" />
+      <Tabs.Screen name="activity" />
+      <Tabs.Screen name="profile" />
+      {/* <Tabs.Screen
         name="index"
         options={{
           title: 'Tab One',
@@ -46,14 +69,7 @@ export default function TabLayout() {
             </Link>
           ),
         }}
-      />
-      <Tabs.Screen
-        name="two"
-        options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
+      /> */}
     </Tabs>
   );
 }
