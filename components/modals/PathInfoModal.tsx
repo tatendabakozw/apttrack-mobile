@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image, ToastAndroid } from "react-native";
 import Modal from "react-native-modal";
 import tw from "twrnc";
 import { Feather } from "@expo/vector-icons";
@@ -19,7 +19,6 @@ const PathInfoModal: React.FC<BottomDrawerProps> = ({
   isVisible,
   onClose,
   heading,
-  children,
 }: BottomDrawerProps) => {
   const [modalHeight, setModalHeight] = useState(MODAL_INITIAL_HEIGHT);
   const { state } = useContext<any>(Store);
@@ -96,9 +95,8 @@ const PathInfoModal: React.FC<BottomDrawerProps> = ({
 
           <View style={tw`bg-slate-50 rounded-lg p-1`}>
             <BusItem />
-            <BusItem />
-            <BusItem />
-
+            {/* <BusItem /> */}
+            {/* <BusItem /> */}
           </View>
         </ScrollView>
       </View>
@@ -107,8 +105,15 @@ const PathInfoModal: React.FC<BottomDrawerProps> = ({
 };
 
 const BusItem = () => {
+  const onBusClick = () => {
+    ToastAndroid.show('Your bus is on its way. We will remind you when your bus is near!', ToastAndroid.LONG);
+  };
   return (
-    <View style={tw`flex flex-col bg-white p-2 mb-1`}>
+    <TouchableOpacity
+      onPress={onBusClick}
+      activeOpacity={0.7}
+      style={tw`flex flex-col bg-white p-2 mb-1`}
+    >
       <View style={tw`flex flex-row justify-between items-center`}>
         <Image
           style={tw`h-8 w-16`}
@@ -133,7 +138,7 @@ const BusItem = () => {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

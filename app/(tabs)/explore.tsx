@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import tw from "twrnc";
@@ -28,9 +28,10 @@ const ExploreTabScreen = (props: Props) => {
   // });
 
   const getDirections = async () => {
+    // console.log('start Location is: ', startLocation)
     try {
       const apiKey = google_maps_api_key;
-      const origin = `${startLocation.latitude},${startLocation.longitude}`;
+      const origin = startLocation ? `${startLocation.latitude},${startLocation.longitude}` : `${location.latitude},${location.longitude}`;
       const destinationStr = `${destinationLocation.latitude},${destinationLocation.longitude}`;
       const apiUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destinationStr}&key=${apiKey}`;
 
@@ -81,6 +82,8 @@ const ExploreTabScreen = (props: Props) => {
     }
   };
 
+  console.log('my start location: ', location)
+
   useEffect(() => {
     if (location && destinationLocation && startLocation) {
       getDirections();
@@ -101,11 +104,11 @@ const ExploreTabScreen = (props: Props) => {
   }, [estimatedTravelTime, estimatedLength, dispatch]);
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return <View style={tw`min-h-full items-center justify-center content-center` }><ActivityIndicator size={'large'}/></View>;
   }
 
   if (error) {
-    return <Text>Error: {error}</Text>;
+    return <Text  style={tw`min-h-full items-center justify-center content-center`}>Error: {error}</Text>;
   }
 
   return (

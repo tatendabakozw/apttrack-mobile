@@ -14,6 +14,8 @@ import LocationSmallButton from "../buttons/location-buttons/LocationSmallButton
 import axios from "axios";
 import { config } from "@/utils/config";
 import { Store } from "@/context/Store";
+import * as SecureStore from "expo-secure-store";
+import { locationItem } from "@/utils/types";
 
 const MODAL_INITIAL_HEIGHT = "60%";
 
@@ -37,6 +39,13 @@ const SelectLocationModal: React.FC<BottomDrawerProps> = ({
   type,
 }: BottomDrawerProps) => {
   const [modalHeight, setModalHeight] = useState(MODAL_INITIAL_HEIGHT);
+  const [home_address, setHomeAddress] = useState<
+    locationItem | any | undefined
+  >({});
+  const [work_address, setWorkAddress] = useState<
+    locationItem | any | undefined
+  >({});
+  const [places, setPlaces] = useState([]);
   const { dispatch } = useContext<any>(Store);
   const [loading, setLoading] = useState(false);
 
@@ -47,7 +56,26 @@ const SelectLocationModal: React.FC<BottomDrawerProps> = ({
     }
   }, [isVisible]);
 
-  const [places, setPlaces] = useState([]);
+  const getCountryFromStorage = async () => {
+    const home_: any = await SecureStore.getItemAsync("home_address");
+    const work_: any = await SecureStore.getItemAsync("work_address");
+    setHomeAddress({
+      longitude: home_?.coords?.lng,
+      latitude: home_?.coords?.lat,
+      name: home_?.type,
+      address: home_?.address,
+    });
+    setWorkAddress({
+      longitude: work_?.coords?.lng,
+      latitude: work_?.coords?.lat,
+      name: work_?.type,
+      address: work_?.address,
+    });
+  };
+
+  useEffect(() => {
+    getCountryFromStorage();
+  }, []);
 
   const handleSearch = async () => {
     try {
@@ -95,8 +123,6 @@ const SelectLocationModal: React.FC<BottomDrawerProps> = ({
     setValue("");
   };
 
-  // console.log("found places is", places);
-
   return (
     <Modal
       isVisible={isVisible}
@@ -131,17 +157,17 @@ const SelectLocationModal: React.FC<BottomDrawerProps> = ({
 
           {places?.length < 1 && (
             <View
-              style={tw`bg-slate-100 rounded-lg p-2 mt-2 flex flex-row justify-between`}
+              style={tw`bg-slate-100 rounded-lg p-[4px] mt-2 flex flex-row justify-between`}
             >
               <LocationSmallButton heading="work" icon_name="briefcase" />
-              <View style={tw`pl-2`} />
+              <View style={tw`pl-[4px]`} />
               <LocationSmallButton heading="home" icon_name="home" />
-              <View style={tw`pl-2`} />
+              <View style={tw`pl-[4px]`} />
               <LocationSmallButton heading="locate" icon_name="map-pin" />
             </View>
           )}
 
-{/* loading indocator */}
+          {/* loading indocator */}
           {loading && (
             <View style={tw`py-4`}>
               <ActivityIndicator size={"large"} />

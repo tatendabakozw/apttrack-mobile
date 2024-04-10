@@ -6,9 +6,11 @@ import {
   View,
   Platform,
   StatusBar,
+  Pressable,
 } from "react-native";
 import tw from "twrnc";
-import { AntDesign, Feather, Entypo, FontAwesome } from "@expo/vector-icons";
+import { AntDesign, Entypo, FontAwesome } from "@expo/vector-icons";
+import { Link } from "expo-router";
 
 type Props = {};
 
@@ -32,30 +34,26 @@ const ProfileTabScreen = (props: Props) => {
         Tatenda Samuel Bako
       </Text>
       <Text style={tw`text-sm text-slate-500 pb-8`}>Tap to edit</Text>
-      <View style={tw`bg-white rounded-3xl overflow-hidden w-full px-1`}>
+      <View
+        style={tw`bg-white rounded-3xl overflow-hidden w-full flex flex-col px-1`}
+      >
         <LinkItem
+          location="logindetails"
           name="Login Details"
           details="Username, Password"
           icon={<FontAwesome name="user-o" size={24} color="black" />}
         />
         <View style={tw`border-b border-slate-50`} />
         <LinkItem
-          name="Help"
-          details="FAQs, Helpdesk"
-          icon={<Feather name="headphones" size={24} color="black" />}
-        />
-        <View style={tw`border-b border-slate-50`} />
-        <LinkItem
+          location="address"
           name="Address & Location"
           details="Home address, Work address"
           icon={<Entypo name="address" size={24} color="black" />}
         />
-
-        
       </View>
       <TouchableOpacity style={tw`bg-[#183641] w-full my-8 rounded-lg p-4`}>
-          <Text style={tw`text-white text-center`}>Logout</Text>
-        </TouchableOpacity>
+        <Text style={tw`text-white text-center`}>Logout</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -64,21 +62,25 @@ interface LinkItemProps {
   name: string;
   details: string;
   icon: any;
+  location: any;
 }
 
-const LinkItem = ({ name, details, icon }: LinkItemProps) => {
-  return (
+const LinkItem = ({ name, details, icon, location }: LinkItemProps) => (
+  <Link href={location} asChild>
+    <Pressable>
     <View style={tw`flex flex-row items-center p-4`}>
-      {/* @ts-ignore */}
-      {icon}
-      <View style={tw`flex flex-col px-4 flex-1`}>
-        <Text style={tw`text-lg font-semibold text-slate-900`}>{name}</Text>
-        <Text style={tw`text-slate-400 text-sm`}>{details}</Text>
+        <View>{icon}</View>
+        <View style={tw`flex flex-col px-4 flex-1`}>
+          <Text style={tw`text-lg font-semibold text-slate-900`}>{name}</Text>
+          <Text style={tw`text-slate-400 text-sm`}>{details}</Text>
+        </View>
+        <View>
+          <Entypo name="chevron-small-right" size={24} color="#334155" />
+        </View>
       </View>
-      <Entypo name="chevron-small-right" size={24} color="#334155" />
-    </View>
-  );
-};
+    </Pressable>
+  </Link>
+);
 
 export default ProfileTabScreen;
 

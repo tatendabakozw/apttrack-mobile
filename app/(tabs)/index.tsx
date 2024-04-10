@@ -1,3 +1,9 @@
+import DestinationLocationButton from "@/components/buttons/location-buttons/DestinationLocationButton";
+import CurrentLocationButton from "@/components/buttons/location-buttons/CurrentLocationButton";
+import { Text } from "@/components/Themed";
+import { Link } from "expo-router";
+import React from "react";
+import tw from "twrnc";
 import {
   StyleSheet,
   View,
@@ -6,18 +12,12 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import React from "react";
-import { Text } from "@/components/Themed";
-import tw from "twrnc";
-import CurrentLocationButton from "@/components/buttons/location-buttons/CurrentLocationButton";
-import DestinationLocationButton from "@/components/buttons/location-buttons/DestinationLocationButton";
-import { Link } from "expo-router";
 
 export default function HomeTabScreen() {
  
   return (
     <ScrollView style={[tw`px-4`, styles.container]}>
-      <Text style={tw`text-6xl w-3/4 pt-16 pb-8`}>
+      <Text style={tw`text-5xl w-3/4 pt-16 pb-8 text-white`}>
         Where do you want to go?
       </Text>
       <View style={tw`relative items-center content-center justify-center`}>

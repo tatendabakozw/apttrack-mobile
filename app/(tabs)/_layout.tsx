@@ -24,8 +24,9 @@ export default function TabLayout() {
           return <Ionicons name={iconName} size={24} color={color} />;
         },
         headerShown: false,
-        tabBarActiveTintColor:route.name === 'index' ? "#cbc5e9" : '#2f4a55',
+        tabBarActiveTintColor: route.name === "index" ? "#cbc5e9" : "#2f4a55",
         tabBarInactiveTintColor: "#94a3b8",
+        tabBarVisible: route.name == 'address',
         tabBarLabelStyle: {
           fontSize: 13,
         },
@@ -33,7 +34,7 @@ export default function TabLayout() {
           height: 70,
           paddingVertical: Platform.OS === "ios" ? 20 : 0,
           position: "absolute",
-          bottom: 20,
+          bottom: 10,
           left: 10,
           right: 10,
           borderRadius: 20,
@@ -45,31 +46,24 @@ export default function TabLayout() {
         tabBarShowLabel: false,
       })}
     >
-    <Tabs.Screen name="index" options={{title: 'Tab One',}} />
+      <Tabs.Screen name="index" options={{ title: "Tab One" }} />
       <Tabs.Screen name="explore" />
       <Tabs.Screen name="activity" />
       <Tabs.Screen name="profile" />
-      {/* <Tabs.Screen
-        name="index"
+
+      {/* // items not appearing on navbar */}
+      <Tabs.Screen
+        name="logindetails"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
+          href: null,
         }}
-      /> */}
+      />
+      <Tabs.Screen
+        name="address"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }
